@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<form action="{% url 'index' %}", method="post">
+    {% csrf_token %}
+    Name
+    <br>
+    <input type="text" name="name">
+    <br><br>
+    Message
+    <br>
+    <input type="text" name="message">
+    <br>
+    <br>
+    <input type="submit" value="Post">
+</form>
+
+<br>
+
+<!-- {{here}} -->
+{% for h in here %}
+    &nbsp; &nbsp; &nbsp; &nbsp; from <b>{{ h.name }}</b>:
+    <br>
+    {{ h.message }}
+    <br><br>
+{% endfor %}
