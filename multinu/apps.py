@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class GuestbookConfig(AppConfig):
+class MultinuConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'guestbook'
+    name = 'multinu'
