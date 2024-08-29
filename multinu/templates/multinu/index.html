@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+        <style>
+            body, input {
+                color: lime;
+                background-color: black;
+            }
+            math {
+                font-style: italic;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    <form method="POST">
+                        AI request
+                        <br>
+                        <input type="text" placeholder="disabled" disabled>
+                        <input type="submit" value="Send prompt" formaction="">
+                        <br>
+                        <br>
+
+                        Simulation time (1/<math>μ</math>)
+                        <br>
+                        <input type="text" value=1000 placeholder=1000>
+                        <br>
+                        <br>
+
+                        Time step (1/<math>μ</math>)
+                        <br>
+                        <input type="text" value=0.01 placeholder=0.01>
+                        <br>
+                        <br>
+
+                        Probability of interaction per neutrino per step
+                        <br>
+                        <input type="text" value=0.1 placeholder=0.1>
+                        <br>
+                        <br>
+
+                        Number of neutrinos
+                        <br>
+                        <input type="text" id="N_A" value=60 placeholder=60>
+                        <label for="N1">Group 1</label>
+                        <br>
+                        <input type="text" id="N_B" value=40 placeholder=40>
+                        <label for="N2">Group 2</label>
+                        <br>
+                        <br>
+
+                        Initial polarization components
+                        <br>
+                        1
+                        <input type="text" value=0.001 placeholder=0.001 size=8>
+                        2
+                        <input type="text" value=0 placeholder=0 placeholder=0 size=8>
+                        3
+                        <input type="text" value=0.9999995 placeholder=0.9999995 size=8>
+                        <label>Group 1</label>
+                        <br>
+                        1
+                        <input type="text" value=-0.001 placeholder=-0.001 size=8>
+                        2
+                        <input type="text" value=0 placeholder=0 size=8>
+                        3
+                        <input type="text" value=-0.9999995 placeholder=-0.9999995 size=8>
+                        <label>Group 2</label>
+                        <br>
+                        <br>
+
+                        Oscillation frequencies (<math>μ</math>)
+                        <br>
+                        <input type="text" id="omega_A" value=0.1 placeholder=0.1>
+                        <label for="omega_A">Group 1</label>
+                        <br>
+                        <input type="text" id="omega_B" value=0.2 placeholder=0.2>
+                        <label for="omega_B">Group 2</label>
+                        <br>
+                        <br>
+                        
+                        <input type="submit" value="Run simulation", formaction="">
+                        <br>
+                        <br>
+
+                        {% csrf_token %}
+                    </form>
+                </div>
+
+                <div class="col-md-6 col-12">
+                    <img style="width: 100%" src="https://preview.redd.it/dall-e-can-it-be-used-to-create-engineering-diagrams-v0-d8cdiqsyz6vb1.png?width=1024&format=png&auto=webp&s=2573d435512e3ea2c9f5c11ef7d469bb16138839">
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </body>
+</html>
