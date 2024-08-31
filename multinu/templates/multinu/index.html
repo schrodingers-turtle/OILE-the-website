@@ -32,28 +32,28 @@
 
                         Simulation time (1/<math>μ</math>)
                         <br>
-                        <input type="text" value=1000 placeholder=1000>
+                        <input type="text" name="tf" value="{{ form_values.tf }}" placeholder="{{ form_values.tf }}">
                         <br>
                         <br>
 
                         Time step (1/<math>μ</math>)
                         <br>
-                        <input type="text" value=0.01 placeholder=0.01>
+                        <input type="text" name="dt" value="{{ form_values.dt }}" placeholder="{{ form_values.dt }}">
                         <br>
                         <br>
 
                         Probability of interaction per neutrino per step
                         <br>
-                        <input type="text" value=0.1 placeholder=0.1>
+                        <input type="text" name="prob" value="{{ form_values.prob }}" placeholder="{{ form_values.prob }}">
                         <br>
                         <br>
 
                         Number of neutrinos
                         <br>
-                        <input type="text" id="N_A" value=60 placeholder=60>
+                        <input type="text" name="N_A" id="N_A" value="{{ form_values.N_A }}" placeholder="{{ form_values.N_A }}">
                         <label for="N1">Group 1</label>
                         <br>
-                        <input type="text" id="N_B" value=40 placeholder=40>
+                        <input type="text" name="N_B" id="N_B" value="{{ form_values.N_B }}" placeholder="{{ form_values.N_B }}">
                         <label for="N2">Group 2</label>
                         <br>
                         <br>
@@ -61,34 +61,34 @@
                         Initial polarization components
                         <br>
                         1
-                        <input type="text" value=0.001 placeholder=0.001 size=8>
+                        <input type="text" name="P_A01" value="{{ form_values.P_A01 }}" placeholder="{{ form_values.P_A01 }}" size=8>
                         2
-                        <input type="text" value=0 placeholder=0 placeholder=0 size=8>
+                        <input type="text" name="P_A02" value="{{ form_values.P_A02 }}" placeholder="{{ form_values.P_A02 }}" size=8>
                         3
-                        <input type="text" value=0.9999995 placeholder=0.9999995 size=8>
+                        <input type="text" name="P_A03" value="{{ form_values.P_A03 }}" placeholder="{{ form_values.P_A03 }}" size=8>
                         <label>Group 1</label>
                         <br>
                         1
-                        <input type="text" value=-0.001 placeholder=-0.001 size=8>
+                        <input type="text" name="P_B01" value="{{ form_values.P_B01 }}" placeholder="{{ form_values.P_B01 }}" size=8>
                         2
-                        <input type="text" value=0 placeholder=0 size=8>
+                        <input type="text" name="P_B02" value="{{ form_values.P_B02 }}" placeholder="{{ form_values.P_B02 }}" size=8>
                         3
-                        <input type="text" value=-0.9999995 placeholder=-0.9999995 size=8>
+                        <input type="text" name="P_B03" value="{{ form_values.P_B03 }}" placeholder="{{ form_values.P_B03 }}" size=8>
                         <label>Group 2</label>
                         <br>
                         <br>
 
                         Oscillation frequencies (<math>μ</math>)
                         <br>
-                        <input type="text" id="omega_A" value=0.1 placeholder=0.1>
+                        <input type="text" name="omega_A" id="omega_A" value="{{ form_values.omega_A }}" placeholder="{{ form_values.omega_A }}">
                         <label for="omega_A">Group 1</label>
                         <br>
-                        <input type="text" id="omega_B" value=0.2 placeholder=0.2>
+                        <input type="text" name="omega_B" id="omega_B" value="{{ form_values.omega_B }}" placeholder="{{ form_values.omega_B }}">
                         <label for="omega_B">Group 2</label>
                         <br>
                         <br>
                         
-                        <input type="submit" value="Run simulation" formaction="">
+                        <input type="submit" value="Run simulation" formaction="/simulate/">
                         <br>
                         <br>
 
