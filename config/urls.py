@@ -17,10 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from multinu.views import index, simulate
+from multinu.views import index
 
 urlpatterns = [
     path('', index),
-    path('simulate/', simulate),
     path('admin/', admin.site.urls),
 ]
