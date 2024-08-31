@@ -1,3 +1,5 @@
+# from .ai import edit_params
+
 from django.shortcuts import render
 
 import subprocess
@@ -19,6 +21,22 @@ DEFAULT_FORM_VALUES = {
 }
 DEFAULT_GRAPH_PATH = 'multinu/default_graph.png'
 
+SIMULATION_PARAM_KEYS = (
+    'tf',
+    'dt',
+    'prob',
+    'N_A',
+    'N_B',
+    'P_A01',
+    'P_A02',
+    'P_A03',
+    'P_B01',
+    'P_B02',
+    'P_B03',
+    'omega_A',
+    'omega_B'
+)
+
 
 def index(request):
     if request.method == 'GET':
@@ -28,25 +46,18 @@ def index(request):
     elif request.method == 'POST':
         form_values = request.POST.dict()
 
-        if form_values.get('prompt'):
-            # AI logic here.
-            pass
+        # Separate simulation parameters from form data.
+        simulation_parameters = [form_values.get(key) for key in SIMULATION_PARAM_KEYS]
 
-        graph_path = _run_simulation(
-            form_values.get('tf'),
-            form_values.get('dt'),
-            form_values.get('prob'),
-            form_values.get('N_A'),
-            form_values.get('N_B'),
-            form_values.get('P_A01'),
-            form_values.get('P_A02'),
-            form_values.get('P_A03'),
-            form_values.get('P_B01'),
-            form_values.get('P_B02'),
-            form_values.get('P_B03'),
-            form_values.get('omega_A'),
-            form_values.get('omega_B')
-        )
+        if form_values.get('prompt'):
+            # AI logic here. E.g.:
+            # simulation_parameters = edit_params(form_values.get('prompt'), *simulation_parameters)
+
+            # Update form values to reflect new simulation parameters.
+            for param, key in zip(simulation_parameters, SIMULATION_PARAM_KEYS):
+                form_values[key] = param
+
+        graph_path = _run_simulation(*simulation_parameters)
 
     context = {
         'form_values': form_values,
