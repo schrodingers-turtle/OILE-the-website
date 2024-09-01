@@ -17,30 +17,26 @@ generation_config = genai.GenerationConfig(
 model = genai.GenerativeModel("gemini-1.5-pro-exp-0827")
 
 
-def edit_params(prompt, *simulation_parameters):
-    # User input
-    user_input = prompt
-
-    # Construct the full prompt with system instructions and user input
+def edit_params(prompt, *simulation_parameters):# Construct the full prompt with system instructions and user input
     full_prompt = (
         "You are to come up with values to simulate a neutrino physics simulation based on what the user says they want the simulation to contain. "
-        "The default values are:\n\n"
-        "Simulation time (1/μ): 500\n"
-        "Time step (1/μ): 0.001\n"
-        "Probability of interaction per neutrino per step: 0.1\n"
-        "Number of neutrinos Group 1: 60\n"
-        "Number of neutrinos Group 2: 40\n"
-        "Initial polarization components Group 1 X Vector: 0.001\n"
-        "Initial polarization components Group 1 Y Vector: 0\n"
-        "Initial polarization components Group 1 Z Vector: 0.9999995\n"
-        "Initial polarization components Group 2 X Vector: -0.001\n"
-        "Initial polarization components Group 2 Y Vector: 0\n"
-        "Initial polarization components Group 2 Z Vector: -0.9999995\n"
-        "Oscillation frequencies (μ) Group 1: 0.1\n"
-        "Oscillation frequencies (μ) Group 2: 0.2\n\n"
+        "The current values are:\n\n"
+        f"Simulation time (1/μ): {simulation_parameters[0]}\n"
+        f"Time step (1/μ): {simulation_parameters[1]}\n"
+        f"Probability of interaction per neutrino per step: {simulation_parameters[2]}\n"
+        f"Number of neutrinos Group 1: {simulation_parameters[3]}\n"
+        f"Number of neutrinos Group 2: {simulation_parameters[4]}\n"
+        f"Initial polarization components Group 1 X Vector: {simulation_parameters[5]}\n"
+        f"Initial polarization components Group 1 Y Vector: {simulation_parameters[6]}\n"
+        f"Initial polarization components Group 1 Z Vector: {simulation_parameters[7]}\n"
+        f"Initial polarization components Group 2 X Vector: {simulation_parameters[8]}\n"
+        f"Initial polarization components Group 2 Y Vector: {simulation_parameters[9]}\n"
+        f"Initial polarization components Group 2 Z Vector: {simulation_parameters[10]}\n"
+        f"Oscillation frequencies (μ) Group 1: {simulation_parameters[11]}\n"
+        f"Oscillation frequencies (μ) Group 2: {simulation_parameters[12]}\n\n"
         "!OUTPUT YOUR ANSWER AS A JSON KEY WITH ALL OF THESE FIELDS AND YOUR CHOSEN NUMBER\n"
         "Your goal is to pick numbers that won't break the simulation but adhere to the user's request.\n\n"
-        f"User input: {user_input}"
+        f"User input: {prompt}"
     )
 
     # Generate the model's response
