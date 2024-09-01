@@ -1,4 +1,4 @@
-# from .ai import edit_params
+from .ai import edit_params
 
 from django.shortcuts import render
 
@@ -50,14 +50,16 @@ def index(request):
         simulation_parameters = [form_values.get(key) for key in SIMULATION_PARAM_KEYS]
 
         if form_values.get('prompt'):
-            # AI logic here. E.g.:
-            # simulation_parameters = edit_params(form_values.get('prompt'), *simulation_parameters)
+            simulation_parameters = edit_params(form_values.get('prompt'), *simulation_parameters)
 
             # Update form values to reflect new simulation parameters.
             for param, key in zip(simulation_parameters, SIMULATION_PARAM_KEYS):
                 form_values[key] = param
 
         graph_path = _run_simulation(*simulation_parameters)
+    
+    else:
+        raise RuntimeError("We didn't think about request methods other than GET or POST.")
 
     context = {
         'form_values': form_values,
