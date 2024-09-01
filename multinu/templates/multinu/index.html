@@ -21,9 +21,19 @@
     </head>
     <body>
         <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-12">
-                    <form action="/" method="POST">
+            <form action="/" method="POST">
+                {% if ai_reply %}
+                <div class="row">
+                    <div class="column">
+                        AI response: {{ ai_reply }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <br>
+
+                <div class="row">
+                    <div class="col-md-6 col-12">
                         AI request
                         <br>
                         <input type="text" name="prompt" placeholder="Rotate the polarizations by 45 degrees around the y (i.e. 2) axis." size=50>
@@ -94,13 +104,13 @@
                         <br>
 
                         {% csrf_token %}
-                    </form>
-                </div>
+                    </div>
 
-                <div class="col-md-6 col-12">
-                    <img src="{% static graph_path %}">
+                    <div class="col-md-6 col-12">
+                        <img src="{% static graph_path %}">
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->

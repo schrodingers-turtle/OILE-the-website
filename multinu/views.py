@@ -39,6 +39,8 @@ SIMULATION_PARAM_KEYS = (
 
 
 def index(request):
+    ai_reply = None
+    
     if request.method == 'GET':
         form_values = DEFAULT_FORM_VALUES
         graph_path = DEFAULT_GRAPH_PATH
@@ -50,7 +52,7 @@ def index(request):
         simulation_parameters = [form_values.get(key) for key in SIMULATION_PARAM_KEYS]
 
         if form_values.get('prompt'):
-            simulation_parameters = edit_params(form_values.get('prompt'), *simulation_parameters)
+            simulation_parameters, ai_reply = edit_params(form_values.get('prompt'), *simulation_parameters)
 
             # Update form values to reflect new simulation parameters.
             for param, key in zip(simulation_parameters, SIMULATION_PARAM_KEYS):
@@ -63,7 +65,8 @@ def index(request):
 
     context = {
         'form_values': form_values,
-        'graph_path': graph_path
+        'graph_path': graph_path,
+        'ai_reply': ai_reply
     }
 
     return render(request, 'multinu/index.html', context=context)

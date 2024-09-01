@@ -34,7 +34,8 @@ def edit_params(prompt, *simulation_parameters):# Construct the full prompt with
         f"Initial polarization components Group 2 Z Vector: {simulation_parameters[10]}\n"
         f"Oscillation frequencies (μ) Group 1: {simulation_parameters[11]}\n"
         f"Oscillation frequencies (μ) Group 2: {simulation_parameters[12]}\n\n"
-        "!OUTPUT YOUR ANSWER AS A JSON KEY WITH ALL OF THESE FIELDS AND YOUR CHOSEN NUMBER\n"
+        "!OUTPUT YOUR ANSWER AS A JSON KEY WITH ALL OF THESE FIELDS AND YOUR CHOSEN NUMBERS\n"
+        "!INCLUDE ONE MORE FIELD AS THE FIRST FIELD, \"Chat reply\", WHICH IS YOUR REPLY WITH A DETAILED EXPLANATION OF YOUR NUMBERS\n"
         "Your goal is to pick numbers that won't break the simulation but adhere to the user's request.\n\n"
         f"User input: {prompt}"
     )
@@ -52,22 +53,23 @@ def edit_params(prompt, *simulation_parameters):# Construct the full prompt with
     json_str = model_response.replace("```json\n", "").replace("\n```", "")
 
     # Parse JSON
-    simulation_data = json.loads(json_str)
+    response_data = json.loads(json_str)
 
     # Split JSON into different variables
-    simulation_time = simulation_data.get("Simulation time (1/μ)")
-    time_step = simulation_data.get("Time step (1/μ)")
-    probability_of_interaction = simulation_data.get("Probability of interaction per neutrino per step")
-    num_neutrinos_group1 = simulation_data.get("Number of neutrinos Group 1")
-    num_neutrinos_group2 = simulation_data.get("Number of neutrinos Group 2")
-    initial_polarization_group1_x = simulation_data.get("Initial polarization components Group 1 X Vector")
-    initial_polarization_group1_y = simulation_data.get("Initial polarization components Group 1 Y Vector")
-    initial_polarization_group1_z = simulation_data.get("Initial polarization components Group 1 Z Vector")
-    initial_polarization_group2_x = simulation_data.get("Initial polarization components Group 2 X Vector")
-    initial_polarization_group2_y = simulation_data.get("Initial polarization components Group 2 Y Vector")
-    initial_polarization_group2_z = simulation_data.get("Initial polarization components Group 2 Z Vector")
-    oscillation_frequencies_group1 = simulation_data.get("Oscillation frequencies (μ) Group 1")
-    oscillation_frequencies_group2 = simulation_data.get("Oscillation frequencies (μ) Group 2")
+    simulation_time = response_data.get("Simulation time (1/μ)")
+    time_step = response_data.get("Time step (1/μ)")
+    probability_of_interaction = response_data.get("Probability of interaction per neutrino per step")
+    num_neutrinos_group1 = response_data.get("Number of neutrinos Group 1")
+    num_neutrinos_group2 = response_data.get("Number of neutrinos Group 2")
+    initial_polarization_group1_x = response_data.get("Initial polarization components Group 1 X Vector")
+    initial_polarization_group1_y = response_data.get("Initial polarization components Group 1 Y Vector")
+    initial_polarization_group1_z = response_data.get("Initial polarization components Group 1 Z Vector")
+    initial_polarization_group2_x = response_data.get("Initial polarization components Group 2 X Vector")
+    initial_polarization_group2_y = response_data.get("Initial polarization components Group 2 Y Vector")
+    initial_polarization_group2_z = response_data.get("Initial polarization components Group 2 Z Vector")
+    oscillation_frequencies_group1 = response_data.get("Oscillation frequencies (μ) Group 1")
+    oscillation_frequencies_group2 = response_data.get("Oscillation frequencies (μ) Group 2")
+    ai_reply = response_data.get("Chat reply")
 
     simulation_parameters = [
         simulation_time,
@@ -87,4 +89,4 @@ def edit_params(prompt, *simulation_parameters):# Construct the full prompt with
 
     simulation_parameters = [str(param) for param in simulation_parameters]
 
-    return simulation_parameters
+    return simulation_parameters, ai_reply
