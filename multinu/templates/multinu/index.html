@@ -9,6 +9,7 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
+        <!-- Custom CSS for styling and animations -->
         <style>
             body, input {
                 color: lime;
@@ -17,11 +18,85 @@
             math {
                 font-style: italic;
             }
+            .chat-history {
+                max-height: 300px;
+                overflow-y: auto;
+                border: 1px solid lime;
+                padding: 10px;
+                margin-bottom: 15px;
+                animation: fadeIn 1s ease-in-out;
+            }
+            .chat-message {
+                margin-bottom: 10px;
+                opacity: 0;
+                animation: slideUp 0.5s ease-in-out forwards;
+            }
+            .user-message {
+                color: cyan;
+            }
+            .ai-message {
+                color: magenta;
+            }
+            .btn-custom {
+                color: black;
+                background-color: lime;
+                border: 1px solid lime;
+                transition: transform 0.3s, background-color 0.3s;
+            }
+            .btn-custom:hover {
+                background-color: black;
+                color: lime;
+                transform: scale(1.1);
+            }
+            @keyframes fadeIn {
+                0% { opacity: 0; }
+                100% { opacity: 1; }
+            }
+            @keyframes slideUp {
+                0% { transform: translateY(20px); opacity: 0; }
+                100% { transform: translateY(0); opacity: 1; }
+            }
+            .loading {
+                display: none;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: lime;
+                font-size: 24px;
+                z-index: 999;
+                animation: blink 1.5s infinite;
+            }
+            @keyframes blink {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0; }
+            }
         </style>
     </head>
     <body>
         <div class="container">
-            <form action="/" method="POST">
+            <h2>Neutrino Simulation Chat</h2>
+
+            <!-- Loading Animation -->
+            <div id="loading" class="loading">Loading...</div>
+
+            <!-- Chat History Display -->
+            <div class="chat-history">
+                {% for entry in conversation_history %}
+                    <div class="chat-message">
+                        {% if entry.role == 'user' %}
+                            <div class="user-message"><strong>User:</strong> {{ entry.parts.0 }}</div>
+                        {% elif entry.role == 'model' %}
+                            <div class="ai-message"><strong>AI:</strong> {{ entry.parts.0 }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <form action="/" method="POST" onsubmit="showLoading()">
+                {% csrf_token %}
+                
+                <!-- AI Reply Section -->
                 {% if ai_reply %}
                 <div class="row">
                     <div class="column">
@@ -29,47 +104,48 @@
                     </div>
                 </div>
                 {% endif %}
-
+                
                 <br>
 
                 <div class="row">
                     <div class="col-md-6 col-12">
-                        AI request
-                        <br>
-                        <input autofocus type="text" name="prompt" placeholder="Rotate the polarizations by 45 degrees around the y (i.e. 2) axis." size=50>
-                        <input type="submit" value="Send prompt">
-                        <br>
-                        <br>
-
-                        Simulation time (1/<math>μ</math>)
-                        <br>
-                        <input type="text" name="tf" value="{{ form_values.tf }}" placeholder="{{ form_values.tf }}">
+                        <!-- User Input for AI Prompt -->
+                        <label for="prompt">AI request</label>
+                        <input autofocus type="text" id="prompt" name="prompt" placeholder="Rotate the polarizations by 45 degrees around the y (i.e. 2) axis." size=50>
+                        <input type="submit" value="Send prompt" class="btn btn-custom">
                         <br>
                         <br>
 
-                        Time step (1/<math>μ</math>)
-                        <br>
-                        <input type="text" name="dt" value="{{ form_values.dt }}" placeholder="{{ form_values.dt }}">
-                        <br>
-                        <br>
-
-                        Probability of interaction per neutrino per step
-                        <br>
-                        <input type="text" name="prob" value="{{ form_values.prob }}" placeholder="{{ form_values.prob }}">
+                        <!-- Clear Chat History Button -->
+                        <button type="submit" name="clear_chat" value="true" class="btn btn-custom">Clear Chat History</button>
                         <br>
                         <br>
 
-                        Number of neutrinos
+                        <!-- Simulation Parameters -->
+                        <label for="tf">Simulation time (1/<math>μ</math>)</label>
+                        <input type="text" name="tf" id="tf" value="{{ form_values.tf }}" placeholder="{{ form_values.tf }}">
                         <br>
+                        <br>
+
+                        <label for="dt">Time step (1/<math>μ</math>)</label>
+                        <input type="text" name="dt" id="dt" value="{{ form_values.dt }}" placeholder="{{ form_values.dt }}">
+                        <br>
+                        <br>
+
+                        <label for="prob">Probability of interaction per neutrino per step</label>
+                        <input type="text" name="prob" id="prob" value="{{ form_values.prob }}" placeholder="{{ form_values.prob }}">
+                        <br>
+                        <br>
+
+                        <label for="N_A">Number of neutrinos - Group A</label>
                         <input type="text" name="N_A" id="N_A" value="{{ form_values.N_A }}" placeholder="{{ form_values.N_A }}">
-                        <label for="N1">Group A</label>
                         <br>
+                        <label for="N_B">Number of neutrinos - Group B</label>
                         <input type="text" name="N_B" id="N_B" value="{{ form_values.N_B }}" placeholder="{{ form_values.N_B }}">
-                        <label for="N2">Group B</label>
                         <br>
                         <br>
 
-                        Initial polarization components
+                        <label>Initial polarization components</label>
                         <br>
                         1
                         <input type="text" name="P_A01" value="{{ form_values.P_A01 }}" placeholder="{{ form_values.P_A01 }}" size=8>
@@ -89,33 +165,36 @@
                         <br>
                         <br>
 
-                        Oscillation frequencies (<math>μ</math>)
-                        <br>
+                        <label for="omega_A">Oscillation frequencies (<math>μ</math>) - Group A</label>
                         <input type="text" name="omega_A" id="omega_A" value="{{ form_values.omega_A }}" placeholder="{{ form_values.omega_A }}">
-                        <label for="omega_A">Group A</label>
                         <br>
+                        <label for="omega_B">Oscillation frequencies (<math>μ</math>) - Group B</label>
                         <input type="text" name="omega_B" id="omega_B" value="{{ form_values.omega_B }}" placeholder="{{ form_values.omega_B }}">
-                        <label for="omega_B">Group B</label>
                         <br>
                         <br>
                         
-                        <input type="submit" value="Run simulation">
+                        <input type="submit" value="Run simulation" class="btn btn-custom">
                         <br>
                         <br>
-
-                        {% csrf_token %}
                     </div>
 
+                    <!-- Simulation Output -->
                     <div class="col-md-6 col-12">
-                        <img src="{% static graph_path %}">
+                        <img src="{% static graph_path %}" alt="Simulation Graph">
                     </div>
                 </div>
             </form>
         </div>
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <script>
+            function showLoading() {
+                document.getElementById('loading').style.display = 'block';
+            }
+        </script>
     </body>
 </html>
